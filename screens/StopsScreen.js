@@ -17,7 +17,7 @@ export default class LinksScreen extends React.Component {
   }
 
   renderItem({ item }) {
-    return <Text>{item.name}</Text>;
+    return <Text>{item.display}</Text>;
   }
 
   render() {
