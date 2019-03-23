@@ -1,5 +1,5 @@
-import React from "react";
-import { FlatList, StyleSheet, Text } from "react-native";
+import React from 'react';
+import { FlatList, StyleSheet, Text } from 'react-native';
 
 function distance(myLat, myLong, stopLat, stopLong) {
   const lat = myLat - stopLat;
@@ -9,24 +9,26 @@ function distance(myLat, myLong, stopLat, stopLong) {
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
-    header: null
+    header: null,
   };
 
   state = {
     myLatitude: 50.056455,
-    myLongitude: 19.951687
+    myLongitude: 19.951687,
   };
 
   async componentDidMount() {
-    const stopsRequest = await fetch("https://krakowpodreka.pl/en/stops/positions/stops/");
+    const stopsRequest = await fetch('https://krakowpodreka.pl/en/stops/positions/stops/');
     const stops = await stopsRequest.json();
 
     const { myLatitude, myLongitude } = this.state;
     const distanceStops = stops
-      .map(({ latitude, longitude, id, display }) => ({
-        id: id,
-        display: display,
-        distance: distance(myLatitude, myLongitude, latitude, longitude)
+      .map(({
+        latitude, longitude, id, display,
+      }) => ({
+        id,
+        display,
+        distance: distance(myLatitude, myLongitude, latitude, longitude),
       }))
       .sort((dist1, dist2) => dist1.distance - dist2.distance)
       .slice(0, 5);
@@ -53,7 +55,7 @@ export default class HomeScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    paddingTop: 20
-  }
+    backgroundColor: '#fff',
+    paddingTop: 20,
+  },
 });
