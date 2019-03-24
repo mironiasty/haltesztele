@@ -1,5 +1,6 @@
 import React from 'react';
-import { FlatList, StyleSheet, Text } from 'react-native';
+import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { Location, Permissions } from 'expo';
 import { getStops, closestStops } from '../utils/stops';
 
 export default class HomeScreen extends React.Component {
@@ -12,6 +13,10 @@ export default class HomeScreen extends React.Component {
     myLongitude: 19.951687,
   };
 
+  componentWillMount() {
+    this._getLocationAsync();
+  }
+
   async componentDidMount() {
     const stops = await getStops();
 
@@ -21,6 +26,19 @@ export default class HomeScreen extends React.Component {
     this.setState({ distanceStops });
   }
 
+  _getLocationAsync = async () => {
+    const { status } = await Permissions.askAsync(Permissions.LOCATION);
+    if (status !== 'granted') {
+      console.warn('Permission to access location was denied');
+    }
+
+    const location = await Location.getCurrentPositionAsync({});
+    this.setState({
+      myLatitude: location.coords.latitude,
+      myLongitude: location.coords.longitude,
+    });
+  };
+
   renderItem({ item }) {
     return <Text>{item.display}</Text>;
   }
@@ -28,12 +46,14 @@ export default class HomeScreen extends React.Component {
   render() {
     const { distanceStops } = this.state;
     return (
-      <FlatList
-        style={styles.container}
-        data={distanceStops}
-        keyExtractor={item => `${item.id}`}
-        renderItem={this.renderItem}
-      />
+      <View style={styles.container}>
+        <FlatList
+          style={styles.container}
+          data={distanceStops}
+          keyExtractor={item => `${item.id}`}
+          renderItem={this.renderItem}
+        />
+      </View>
     );
   }
 }
