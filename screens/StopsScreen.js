@@ -1,5 +1,6 @@
 import React from 'react';
 import { FlatList, StyleSheet, Text } from 'react-native';
+import { getStops } from '../utils/stops';
 
 export default class LinksScreen extends React.Component {
   static navigationOptions = {
@@ -11,8 +12,7 @@ export default class LinksScreen extends React.Component {
   };
 
   async componentDidMount() {
-    const stopsRequest = await fetch('https://krakowpodreka.pl/en/stops/positions/stops/');
-    const stops = await stopsRequest.json();
+    const stops = await getStops();
     this.setState({ stops });
   }
 

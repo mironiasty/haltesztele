@@ -1,11 +1,6 @@
 import React from 'react';
 import { FlatList, StyleSheet, Text } from 'react-native';
-
-function distance(myLat, myLong, stopLat, stopLong) {
-  const lat = myLat - stopLat;
-  const long = myLong - stopLong;
-  return Math.sqrt(lat * lat + long * long);
-}
+import { getStops, closestStops } from '../utils/stops';
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
@@ -18,20 +13,11 @@ export default class HomeScreen extends React.Component {
   };
 
   async componentDidMount() {
-    const stopsRequest = await fetch('https://krakowpodreka.pl/en/stops/positions/stops/');
-    const stops = await stopsRequest.json();
+    const stops = await getStops();
 
     const { myLatitude, myLongitude } = this.state;
-    const distanceStops = stops
-      .map(({
-        latitude, longitude, id, display,
-      }) => ({
-        id,
-        display,
-        distance: distance(myLatitude, myLongitude, latitude, longitude),
-      }))
-      .sort((dist1, dist2) => dist1.distance - dist2.distance)
-      .slice(0, 5);
+    const distanceStops = closestStops(stops, myLatitude, myLongitude);
+
     this.setState({ distanceStops });
   }
 
