@@ -2,6 +2,7 @@ import React from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { Location, Permissions } from 'expo';
 import { getStops, closestStops } from '../utils/stops';
+import Przystanek from '../components/Przystanek';
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
@@ -40,7 +41,7 @@ export default class HomeScreen extends React.Component {
   };
 
   renderItem({ item }) {
-    return <Text>{item.display}</Text>;
+    return <Przystanek display={item.display} />;
   }
 
   render() {
