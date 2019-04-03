@@ -39,7 +39,7 @@ export default class HomeScreen extends React.Component {
   }
 
   renderItem({ item }) {
-    return <Przystanek display={item.display} />;
+    return <Przystanek display={item.display} type={item.type} />;
   }
 
   render() {

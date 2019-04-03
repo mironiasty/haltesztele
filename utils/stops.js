@@ -12,10 +12,11 @@ export function closestStops(stops, myLatitude, myLongitude) {
 }
 
 function stopWithDistance(stop, myLatitude, myLongitude) {
-  const { latitude, longitude, id, display } = stop;
+  const { latitude, longitude, id, display, type } = stop;
   return {
     id,
     display,
+    type,
     distance: distance(myLatitude, myLongitude, latitude, longitude),
   };
 }
