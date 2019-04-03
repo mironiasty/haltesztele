@@ -4,10 +4,11 @@ import { PacmanIndicator } from 'react-native-indicators';
 import { Location, Permissions } from 'expo';
 import { getStops, closestStops } from '../utils/stops';
 import Przystanek from '../components/Przystanek';
+import Colors from '../constants/Colors';
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
-    header: null,
+    title: 'Najbliższe przystanki',
   };
 
   state = {};
@@ -46,7 +47,7 @@ export default class HomeScreen extends React.Component {
     if (!distanceStops) {
       return (
         <View style={styles.indicator}>
-          <PacmanIndicator size={160} color="pink" />
+          <PacmanIndicator size={160} color={Colors.tabIconDefault} />
         </View>
       );
     }
@@ -67,11 +68,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    paddingTop: 20,
   },
   indicator: {
     flex: 1,
     backgroundColor: '#fff',
-    paddingTop: 60,
   },
 });
