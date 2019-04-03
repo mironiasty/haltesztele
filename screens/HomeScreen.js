@@ -1,5 +1,6 @@
 import React from 'react';
-import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { FlatList, StyleSheet, View } from 'react-native';
+import { PacmanIndicator } from 'react-native-indicators';
 import { Location, Permissions } from 'expo';
 import { getStops, closestStops } from '../utils/stops';
 import Przystanek from '../components/Przystanek';
@@ -9,36 +10,32 @@ export default class HomeScreen extends React.Component {
     header: null,
   };
 
-  state = {
-    myLatitude: 50.056455,
-    myLongitude: 19.951687,
-  };
-
-  componentWillMount() {
-    this._getLocationAsync();
-  }
+  state = {};
 
   async componentDidMount() {
     const stops = await getStops();
+    const coordinate = await this._getLocationAsync();
 
-    const { myLatitude, myLongitude } = this.state;
+    const { myLatitude, myLongitude } = coordinate;
+    // const myLatitude = coordinate.myLatitude;
+    // const myLongitude = coordinate.myLongitude; to jest to samo co wyżej
     const distanceStops = closestStops(stops, myLatitude, myLongitude);
 
     this.setState({ distanceStops });
   }
 
-  _getLocationAsync = async () => {
+  async _getLocationAsync() {
     const { status } = await Permissions.askAsync(Permissions.LOCATION);
     if (status !== 'granted') {
       console.warn('Permission to access location was denied');
     }
 
     const location = await Location.getCurrentPositionAsync({});
-    this.setState({
+    return {
       myLatitude: location.coords.latitude,
       myLongitude: location.coords.longitude,
-    });
-  };
+    };
+  }
 
   renderItem({ item }) {
     return <Przystanek display={item.display} />;
@@ -46,6 +43,13 @@ export default class HomeScreen extends React.Component {
 
   render() {
     const { distanceStops } = this.state;
+    if (!distanceStops) {
+      return (
+        <View style={styles.indicator}>
+          <PacmanIndicator size={160} color="pink" />
+        </View>
+      );
+    }
     return (
       <View style={styles.container}>
         <FlatList
@@ -64,5 +68,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     paddingTop: 20,
+  },
+  indicator: {
+    flex: 1,
+    backgroundColor: '#fff',
+    paddingTop: 60,
   },
 });
