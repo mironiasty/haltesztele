@@ -1,6 +1,7 @@
 import React from 'react';
 import { FlatList, StyleSheet, Text } from 'react-native';
 import { getStops } from '../utils/stops';
+import Przystanek from '../components/Przystanek';
 
 export default class LinksScreen extends React.Component {
   static navigationOptions = {
@@ -17,7 +18,7 @@ export default class LinksScreen extends React.Component {
   }
 
   renderItem({ item }) {
-    return <Text>{item.display}</Text>;
+    return <Przystanek display={item.display} type={item.type} />;
   }
 
   render() {
